@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Library;
+﻿namespace Library;
 
 class Program
 {
     static void Main(string[] args)
     {
-        System.Console.WriteLine("Саня Личко чмо");
+        Console.WriteLine("Саня Личко чмо");
     }
 }
