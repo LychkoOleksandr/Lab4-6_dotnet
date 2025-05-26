@@ -32,14 +32,146 @@ namespace LibraryManagement
         }
     }
 
-    // Клас для представлення користувача
+    // Strategy Pattern: Інтерфейс для стратегій обробки запитів на позичання
+    public interface IBorrowStrategy
+    {
+        string ExecuteBorrow(User user, Book book);
+        string GetStrategyName();
+    }
+
+    // Конкретна стратегія: Позичити тільки якщо доступна
+    public class BorrowOnlyIfAvailableStrategy : IBorrowStrategy
+    {
+        public string ExecuteBorrow(User user, Book book)
+        {
+            if (book == null)
+            {
+                return "Book not found";
+            }
+
+            if (book.IsAvailable)
+            {
+                book.IsAvailable = false;
+                user.BorrowedBooks.Add(book);
+                return "Book successfully borrowed";
+            }
+            else
+            {
+                return "Book is unavailable. Please try again later.";
+            }
+        }
+
+        public string GetStrategyName() => "Borrow only if available";
+    }
+
+    // Конкретна стратегія: Позичити або зарезервувати
+    public class BorrowOrReserveStrategy : IBorrowStrategy
+    {
+        public string ExecuteBorrow(User user, Book book)
+        {
+            if (book == null)
+            {
+                return "Book not found";
+            }
+
+            if (book.IsAvailable)
+            {
+                book.IsAvailable = false;
+                user.BorrowedBooks.Add(book);
+                return "Book successfully borrowed";
+            }
+            else
+            {
+                if (!book.Reservations.Contains(user))
+                {
+                    book.Reservations.Add(user);
+                    return "Book is unavailable, but has been reserved for you";
+                }
+                else
+                {
+                    return "Book is unavailable and you have already reserved it";
+                }
+            }
+        }
+
+        public string GetStrategyName() => "Borrow or reserve";
+    }
+
+    // Конкретна стратегія: Додає користувача в чергу очікування
+    public class WaitingListStrategy : IBorrowStrategy
+    {
+        public string ExecuteBorrow(User user, Book book)
+        {
+            if (book == null)
+            {
+                return "Book not found";
+            }
+
+            if (book.IsAvailable)
+            {
+                book.IsAvailable = false;
+                user.BorrowedBooks.Add(book);
+                return "Book successfully borrowed";
+            }
+            else
+            {
+                // Додаємо в чергу очікування тільки якщо користувача там ще немає
+                if (!book.Reservations.Contains(user))
+                {
+                    book.Reservations.Add(user);
+                    int position = book.Reservations.Count;
+                    return $"Book is unavailable. You are added to waiting list at position {position}. You will be notified when book becomes available.";
+                }
+                else
+                {
+                    int position = book.Reservations.IndexOf(user) + 1;
+                    return $"You are already in the waiting list at position {position}";
+                }
+            }
+        }
+
+        public string GetStrategyName() => "Waiting list with position tracking";
+    }
+
+    // Клас для представлення користувача з індивідуальною стратегією
     public class User
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public List<Book> BorrowedBooks { get; set; } = new List<Book>();
+        public IBorrowStrategy BorrowStrategy { get; set; }
+
+        public User()
+        {
+            // За замовчуванням використовуємо стратегію "позичити або зарезервувати"
+            BorrowStrategy = new BorrowOrReserveStrategy();
+        }
+
+        public void SetBorrowStrategy(IBorrowStrategy strategy)
+        {
+            BorrowStrategy = strategy;
+        }
+
+        public string GetCurrentStrategyName()
+        {
+            return BorrowStrategy?.GetStrategyName() ?? "No strategy set";
+        }
     }
+
+    // Контекст для стратегії (тепер використовується для кожного користувача)
+    public class BorrowContext
+    {
+        public string ProcessBorrowRequest(User user, Book book)
+        {
+            if (user.BorrowStrategy == null)
+            {
+                user.BorrowStrategy = new BorrowOrReserveStrategy();
+            }
+            return user.BorrowStrategy.ExecuteBorrow(user, book);
+        }
+    }
+
     // читання csv
     public class CsvBookLoader
     {
@@ -148,15 +280,11 @@ namespace LibraryManagement
             books.Remove(book);
         }
 
-        public List<Book> GetBooks()
-        {
-            return books;
-        }
+        public List<Book> GetBooks() => books;
 
-        public Book FindBookByTitle(string title)
-        {
-            return books.FirstOrDefault(b => b.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
-        }
+        public Book FindBookByTitle(string title) =>
+            books.FirstOrDefault(b =>
+            b.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
     }
 
     // Singleton: Клас для управління користувачами
@@ -187,20 +315,21 @@ namespace LibraryManagement
             users.Add(user);
         }
 
-        public User FindUserById(int id)
-        {
-            return users.FirstOrDefault(u => u.Id == id);
-        }
+        public User FindUserById(int id) => users.FirstOrDefault(u => u.Id == id);
 
-        public List<User> GetUsers()
-        {
-            return users;
-        }
+        public List<User> GetUsers() => users;
     }
 
     // Фасад: Спрощує взаємодію з системою
     public class LibraryFacade
     {
+        private BorrowContext borrowContext;
+
+        public LibraryFacade()
+        {
+            borrowContext = new BorrowContext();
+        }
+
         public void AddBook(Book book)
         {
             LibraryCatalog.Instance.AddBook(book);
@@ -218,20 +347,7 @@ namespace LibraryManagement
         public string BorrowBook(User user, string title)
         {
             Book book = LibraryCatalog.Instance.FindBookByTitle(title);
-            if (book == null)
-            {
-                return "Book not found";
-            }
-            if (book.IsAvailable)
-            {
-                book.IsAvailable = false;
-                user.BorrowedBooks.Add(book);
-                return "Book successfully borrowed";
-            }
-            else
-            {
-                return "Book is unavailable";
-            }
+            return borrowContext.ProcessBorrowRequest(user, book);
         }
 
         public string ReserveBook(User user, string title)
@@ -262,8 +378,26 @@ namespace LibraryManagement
             if (user.BorrowedBooks.Contains(book))
             {
                 user.BorrowedBooks.Remove(book);
-                book.IsAvailable = true;
-                return "Book returned successfully";
+                
+                // Перевіряємо, чи є користувачі в черзі очікування
+                if (book.Reservations.Count > 0)
+                {
+                    // Беремо першого користувача з черги
+                    User nextUser = book.Reservations[0];
+                    book.Reservations.RemoveAt(0);
+                    
+                    // Автоматично призначаємо книгу наступному користувачу
+                    book.IsAvailable = false;
+                    nextUser.BorrowedBooks.Add(book);
+                    
+                    return $"Book returned successfully and automatically assigned to {nextUser.Name} (next in queue)";
+                }
+                else
+                {
+                    // Якщо черги немає, книга стає доступною
+                    book.IsAvailable = true;
+                    return "Book returned successfully";
+                }
             }
             else
             {
@@ -295,11 +429,14 @@ namespace LibraryManagement
             {
                 LibraryUsers.Instance.AddUser(user);
             }
-            
 
             while (true)
             {
                 Console.WriteLine("\nLibrary Management System");
+                if (currentUser != null)
+                {
+                    Console.WriteLine($"Current user: {currentUser.Name} (Strategy: {currentUser.GetCurrentStrategyName()})");
+                }
                 Console.WriteLine("1. Add book");
                 Console.WriteLine("2. Remove book");
                 Console.WriteLine("3. Borrow book");
@@ -308,7 +445,8 @@ namespace LibraryManagement
                 Console.WriteLine("6. Select current user");
                 Console.WriteLine("7. View all books");
                 Console.WriteLine("8. View all users");
-                Console.WriteLine("9. Exit");
+                Console.WriteLine("9. Change current user's borrow strategy");
+                Console.WriteLine("10. Exit");
                 Console.Write("Choose an option: ");
                 string choice = Console.ReadLine();
 
@@ -346,16 +484,6 @@ namespace LibraryManagement
                             string borrowTitle = Console.ReadLine();
                             string borrowResult = facade.BorrowBook(currentUser, borrowTitle);
                             Console.WriteLine(borrowResult);
-                            if (borrowResult == "Book is unavailable")
-                            {
-                                Console.Write("Do you want to reserve it? (yes/no): ");
-                                string response = Console.ReadLine().ToLower();
-                                if (response == "yes")
-                                {
-                                    string reserveResult = facade.ReserveBook(currentUser, borrowTitle);
-                                    Console.WriteLine(reserveResult);
-                                }
-                            }
                         }
                         break;
                     case "4":
@@ -390,6 +518,7 @@ namespace LibraryManagement
                         {
                             currentUser = selectedUser;
                             Console.WriteLine($"Current user set to {selectedUser.Name}");
+                            Console.WriteLine($"User's current strategy: {selectedUser.GetCurrentStrategyName()}");
                         }
                         else
                         {
@@ -401,16 +530,55 @@ namespace LibraryManagement
                         foreach (var book in books)
                         {
                             Console.WriteLine(book.ToString());
+                            if (book.Reservations.Count > 0)
+                            {
+                                Console.WriteLine($"  Waiting list: {string.Join(", ", book.Reservations.Select(u => u.Name))}");
+                            }
                         }
                         break;
                     case "8":
                         List<User> allUsers = LibraryUsers.Instance.GetUsers();
                         foreach (var user in allUsers)
                         {
-                            Console.WriteLine($"ID: {user.Id}, Name: {user.Name}, Email: {user.Email}, Borrowed books: {user.BorrowedBooks.Count}");
+                            Console.WriteLine($"ID: {user.Id}, Name: {user.Name}, Email: {user.Email}, Borrowed books: {user.BorrowedBooks.Count}, Strategy: {user.GetCurrentStrategyName()}");
                         }
                         break;
                     case "9":
+                        if (currentUser == null)
+                        {
+                            Console.WriteLine("Please select a current user first.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Current strategy for {currentUser.Name}: {currentUser.GetCurrentStrategyName()}");
+                            Console.WriteLine("Choose new borrow strategy:");
+                            Console.WriteLine("1. Borrow only if available (no reservation)");
+                            Console.WriteLine("2. Borrow or reserve if unavailable");
+                            Console.WriteLine("3. Waiting list with position tracking");
+                            Console.Write("Choose strategy: ");
+                            string strategyChoice = Console.ReadLine();
+                            
+                            switch (strategyChoice)
+                            {
+                                case "1":
+                                    currentUser.SetBorrowStrategy(new BorrowOnlyIfAvailableStrategy());
+                                    Console.WriteLine($"Strategy for {currentUser.Name} set to: Borrow only if available");
+                                    break;
+                                case "2":
+                                    currentUser.SetBorrowStrategy(new BorrowOrReserveStrategy());
+                                    Console.WriteLine($"Strategy for {currentUser.Name} set to: Borrow or reserve");
+                                    break;
+                                case "3":
+                                    currentUser.SetBorrowStrategy(new WaitingListStrategy());
+                                    Console.WriteLine($"Strategy for {currentUser.Name} set to: Waiting list mode");
+                                    break;
+                                default:
+                                    Console.WriteLine("Invalid strategy choice");
+                                    break;
+                            }
+                        }
+                        break;
+                    case "10":
                         return;
                     default:
                         Console.WriteLine("Invalid option.");
