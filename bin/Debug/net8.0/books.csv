@@ -1,0 +1,119 @@
+Id,Book,Author(s),First published,Genre
+1,A Tale of Two Cities,Charles Dickens,1859,Historical fiction
+2,The Little Prince (Le Petit Prince),Antoine de Saint-Exupéry,1943,Novella
+3,Harry Potter and the Philosopher's Stone,J. K. Rowling,1997,Fantasy
+4,And Then There Were None,Agatha Christie,1939,Mystery
+5,Dream of the Red Chamber (紅樓夢),Cao Xueqin,1791,Family saga
+6,The Hobbit,J. R. R. Tolkien,1937,Fantasy
+7,"The Lion, the Witch and the Wardrobe",C. S. Lewis,1950,"Fantasy, Children's fiction"
+8,She: A History of Adventure,H. Rider Haggard,1887,Adventure
+9,Vardi Wala Gunda (वर्दी वाला गुंडा),Ved Prakash Sharma,1992,Detective
+10,The Da Vinci Code,Dan Brown,2003,Mystery thriller
+11,Harry Potter and the Chamber of Secrets,J. K. Rowling,1998,Fantasy
+12,Harry Potter and the Prisoner of Azkaban,J. K. Rowling,1999,Fantasy
+13,Harry Potter and the Goblet of Fire,J. K. Rowling,2000,Fantasy
+14,Harry Potter and the Order of the Phoenix,J. K. Rowling,2003,Fantasy
+15,Harry Potter and the Half-Blood Prince,J. K. Rowling,2005,Fantasy
+16,Harry Potter and the Deathly Hallows,J. K. Rowling,2007,Fantasy
+17,The Alchemist (O Alquimista),Paulo Coelho,1988,Fantasy
+18,The Catcher in the Rye,J. D. Salinger,1951,Coming-of-age
+19,The Bridges of Madison County,Robert James Waller,1992,Romance
+20,Ben-Hur: A Tale of the Christ,Lew Wallace,1880,Historical fiction
+21,You Can Heal Your Life,Louise Hay,1984,Self-help
+22,One Hundred Years of Solitude (Cien años de soledad),Gabriel García Márquez,1967,Magic realism
+23,Lolita,Vladimir Nabokov,1955,Novel
+24,Heidi,Johanna Spyri,1880,Children's fiction
+25,The Common Sense Book of Baby and Child Care,Benjamin Spock,1946,Manual
+26,Anne of Green Gables,Lucy Maud Montgomery,1908,Children's novel
+27,Black Beauty,Anna Sewell,1877,Children's literature
+28,The Name of the Rose (Il Nome della Rosa),Umberto Eco,1980,"Historical novel, mystery"
+29,The Eagle Has Landed,Jack Higgins,1975,"War, thriller"
+30,Watership Down,Richard Adams,1972,Fantasy
+31,The Hite Report,Shere Hite,1976,Sexology
+32,Charlotte's Web,E. B. White; illustrated by Garth Williams,1952,Children's fiction
+33,The Ginger Man,J. P. Donleavy,1955,Novel
+34,The Tale of Peter Rabbit,Beatrix Potter,1902,Children's Literature
+35,Jonathan Livingston Seagull,Richard Bach,1970,"Novella, Self-help"
+36,The Very Hungry Caterpillar,Eric Carle,1969,"Children's Literature, picture book"
+37,A Message to Garcia,Elbert Hubbard,1899,Essay/Literature
+38,To Kill a Mockingbird,Harper Lee,1960,"Southern Gothic, Bildungsroman"
+39,Flowers in the Attic,V. C. Andrews,1979,"Gothic horror, Family saga"
+40,Cosmos,Carl Sagan,1980,"Popular science, Anthropology, Astrophysics, Cosmology, Philosophy, History"
+41,Sophie's World (Sofies verden),Jostein Gaarder,1991,"Philosophical novel, Young adult"
+42,Angels & Demons,Dan Brown,2000,Mystery-thriller
+43,Kane and Abel,Jeffrey Archer,1979,Novel
+44,How the Steel Was Tempered (Как закалялась сталь),Nikolai Ostrovsky,1932,Socialist realist novel
+45,War and Peace (Война и мир),Leo Tolstoy,1869,Historical novel
+46,The Adventures of Pinocchio (Le avventure di Pinocchio),Carlo Collodi,1881,"Fantasy, Children's fiction"
+47,The Diary of Anne Frank (Het Achterhuis),Anne Frank,1947,"Historical non-fiction, Autobiography, Memoir, Bildungsroman / Coming of Age, Jewish literature"
+48,Your Erroneous Zones,Wayne Dyer,1976,Self-help
+49,The Thorn Birds,Colleen McCullough,1977,Romantic family saga
+50,The Purpose Driven Life,Rick Warren,2002,Christian literature
+51,The Kite Runner,Khaled Hosseini,2003,"Bildungsroman, Historical fiction"
+52,Valley of the Dolls,Jacqueline Susann,1966,Novel
+53,Alcoholics Anonymous Big Book,Bill Wilson,1939,Self-help
+54,How to Win Friends and Influence People,Dale Carnegie,1936,Self-help
+55,The Great Gatsby,F. Scott Fitzgerald,1925,"Novel, tragedy"
+56,Gone with the Wind,Margaret Mitchell,1936,Historical fiction
+57,Rebecca,Daphne du Maurier,1938,Gothic novel
+58,Nineteen Eighty-Four,George Orwell,1949,"Dystopian, political fiction, social science fiction"
+59,The Revolt of Mamie Stover,William Bradford Huie,1951,Fiction
+60,The Girl with the Dragon Tattoo (Män som hatar kvinnor),Stieg Larsson,2005,Fiction
+61,The Lost Symbol,Dan Brown,2009,Fiction
+62,The Hunger Games,Suzanne Collins,2008,Young adult fiction
+63,James and the Giant Peach,Roald Dahl,1961,Children's novel
+64,The Young Guard (Молодая гвардия),Alexander Alexandrovich Fadeyev,1945,Young adult historical novel
+65,Who Moved My Cheese?,Spencer Johnson,1998,"Self-help, motivational, business fable, psychology, leadership, parable"
+66,A Brief History of Time,Stephen Hawking,1988,Popular science
+67,Paul et Virginie,Jacques-Henri Bernardin de Saint-Pierre,1788,Novel
+68,Lust for Life,Irving Stone,1934,Biographical novel
+69,The Wind in the Willows,Kenneth Grahame,1908,Children's literature
+70,The 7 Habits of Highly Effective People,Stephen R. Covey,1989,Self-help
+71,Virgin Soil Upturned (Поднятая целина),Mikhail Sholokhov,1935,Novel
+72,The Celestine Prophecy,James Redfield,1993,New-age spiritual novel
+73,The Fault in Our Stars,John Green,2012,Young adult romantic novel
+74,The Girl on the Train,Paula Hawkins,2015,Thriller
+75,The Shack,William P. Young,2007,Novel
+76,Uncle Styopa (Дядя Стёпа),Sergey Mikhalkov,1936,"Children's Literature, picture book"
+77,The Godfather,Mario Puzo,1969,Crime novel
+78,Love Story,Erich Segal,1970,Romance novel
+79,Catching Fire,Suzanne Collins,2009,"Young Adult novel, adventure, dystopian, science fiction"
+80,Mockingjay,Suzanne Collins,2010,"Young Adult novel, adventure, war, science fiction, action thriller"
+81,Kitchen (キッチン),Banana Yoshimoto,1988,Japanese novel
+82,Andromeda Nebula (Туманность Андромеды),Ivan Yefremov,1957,Science fiction novel
+83,Autobiography of a Yogi (योगी कथामृत),Paramahansa Yogananda,1946,Autobiography
+84,Gone Girl,Gillian Flynn,2012,Crime thriller novel
+85,All Quiet on the Western Front (Im Westen nichts Neues),Erich Maria Remarque,1929,War novel
+86,Things Fall Apart ,Chinua Achebe,1958,Novel
+87,Animal Farm ,George Orwell,1945,"Satirical allegorical novella, Political satire, Dystopian Fiction, Roman à clef"
+88,Wolf Totem (狼图腾),Jiang Rong,2004,Semi-autobiographical novel
+89,The Happy Hooker: My Own Story,Xaviera Hollander,1971,Memoir
+90,Jaws,Peter Benchley,1974,Thriller
+91,Love You Forever,Robert Munsch,1986,"Children's literature, picture book, fiction"
+92,The Women's Room,Marilyn French,1977,Feminist novel
+93,What to Expect When You're Expecting,Arlene Eisenberg and Heidi Murkoff,1984,Pregnancy guide
+94,Adventures of Huckleberry Finn,Mark Twain,1885,"Picaresque novel, Bildungsroman, satire, Robinsonade"
+95,"The Secret Diary of Adrian Mole, Aged 13¾",Sue Townsend,1982,Young adult novel
+96,Pride and Prejudice,Jane Austen,1813,"Classic regency novel, romance"
+97,Kon-Tiki: Across the Pacific in a Raft (Kon-Tiki ekspedisjonen),Thor Heyerdahl,1950,Travel literature
+98,The Good Soldier Švejk (Osudy dobrého vojáka Švejka za světové války),Jaroslav Hašek,1923,Unfinished satirical dark comedy novel
+99,Where the Wild Things Are,Maurice Sendak,1963,Children's picture book
+100,The Power of Positive Thinking,Norman Vincent Peale,1952,Self-help
+101,The Secret,Rhonda Byrne,2006,Self-help
+102,Fear of Flying,Erica Jong,1973,Romantic novel
+103,Dune,Frank Herbert,1965,Science fiction novel
+104,Charlie and the Chocolate Factory,Roald Dahl,1964,Children's fantasy novel
+105,The Naked Ape,Desmond Morris,1968,"Social Science, Anthropology, Psychology"
+106,Where the Crawdads Sing,Delia Owens,2018,Coming-of-age Murder mystery
+107,"Totto-chan, the Little Girl at the Window (窓ぎわのトットちゃん)",Tetsuko Kuroyanagi,1981,Autobiographical novel
+108,Matilda,Roald Dahl,1988,Children's Literature
+109,The Book Thief,Markus Zusak,2005,Young Adult Fiction
+110,Goodnight Moon,Margaret Wise Brown,1947,Children's Literature
+111,The Neverending Story (Die unendliche Geschichte),Michael Ende,1979,Children's Literature
+112,All the Light We Cannot See,Anthony Doerr,2014,"Historical fiction, war novel"
+113,Fifty Shades of Grey,E. L. James,2011,Erotica
+114,The Pillars of the Earth,Ken Follett,1989,Historical fiction
+115,The Hitchhiker's Guide to the Galaxy,Douglas Adams,1979,Science fiction
+116,The Giver,Lois Lowry,1993,Dystopian fiction
+117,The Exorcist,William Peter Blatty,1971,Horror
+118,Fifty Shades Darker,E. L. James,2012,Erotica

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 
 namespace LibraryManagement
 {
@@ -10,14 +11,16 @@ namespace LibraryManagement
         public int Id { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
+        public string Genre { get; set; }
         public int Year { get; set; }
         public bool IsAvailable { get; set; }
         public List<User> Reservations { get; set; } = new List<User>();
 
-        public Book(int id, string title, string author, int year)
+        public Book(int id, string title, string author,string genre, int year)
         {
             Id = id;
             Title = title;
+            Genre = genre;
             Author = author;
             Year = year;
             IsAvailable = true;
@@ -25,7 +28,7 @@ namespace LibraryManagement
 
         public override string ToString()
         {
-            return $"ID: {Id}, Title: {Title}, Author: {Author}, Year: {Year}, Available: {IsAvailable}";
+            return $"ID: {Id}, Title: {Title}, Author: {Author}, Genre: {Genre}, Year: {Year}, Available: {IsAvailable}";
         }
     }
 
@@ -34,7 +37,82 @@ namespace LibraryManagement
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }
         public List<Book> BorrowedBooks { get; set; } = new List<Book>();
+    }
+    // читання csv
+    public class CsvBookLoader
+    {
+        private string filePath;
+
+        public CsvBookLoader(string filePath)
+        {
+            this.filePath = filePath;
+        }
+
+        public List<Book> LoadBooks()
+        {
+            var books = new List<Book>();
+            if (!File.Exists(filePath)) return books;
+
+            using (TextFieldParser parser = new TextFieldParser(filePath))
+            {
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+
+                parser.ReadLine();
+
+                while (!parser.EndOfData)
+                {
+                    string[] fields = parser.ReadFields();
+                    if (fields.Length >= 5)
+                    {
+                        int id = int.Parse(fields[0]);
+                        string title = fields[1];
+                        string author = fields[2];
+                        int year = int.Parse(fields[3]);
+                        string genre = fields[4];
+
+
+                        books.Add(new Book(id, title, author, genre, year));
+                    }
+                }
+            }
+
+            return books;
+        }
+    }
+
+    public class CsvUserLoader
+    {
+        private string filePath;
+
+        public CsvUserLoader(string filePath)
+        {
+            this.filePath = filePath;
+        }
+
+        public List<User> LoadUsers()
+        {
+            var users = new List<User>();
+            if (!File.Exists(filePath)) return users;
+
+            var lines = File.ReadAllLines(filePath);
+            foreach (var line in lines.Skip(1))
+            {
+                var parts = line.Split(',');
+                if (parts.Length >= 3)
+                {
+                    int id = int.Parse(parts[0]);
+                    string name = parts[1];
+                    string email = parts[2];
+
+                    users.Add(new User { Id = id, Name = name, Email = email });
+                }
+            }
+
+            return users;
+        }
     }
 
     // Singleton: Клас для управління каталогом книг
@@ -194,7 +272,7 @@ namespace LibraryManagement
         }
     }
 
-    // Консольний застосунок
+    // консольний застосунок
     class Program
     {
         private static User currentUser = null;
@@ -203,14 +281,21 @@ namespace LibraryManagement
         {
             LibraryFacade facade = new LibraryFacade();
 
-            // Додавання тестових книг
-            facade.AddBook(new Book(1, "Book One", "Author A", 2000));
-            facade.AddBook(new Book(2, "Book Two", "Author B", 2005));
-            facade.AddBook(new Book(3, "Book Three", "Author C", 2010));
+            var bookLoader = new CsvBookLoader("books.csv");
+            var userLoader = new CsvUserLoader("clients.csv");
 
-            // Додавання тестових користувачів
-            LibraryUsers.Instance.AddUser(new User { Id = 1, Name = "User A" });
-            LibraryUsers.Instance.AddUser(new User { Id = 2, Name = "User B" });
+            var booksFromFile = bookLoader.LoadBooks();
+            foreach (var book in booksFromFile)
+            {
+                facade.AddBook(book);
+            }
+
+            var usersFromFile = userLoader.LoadUsers();
+            foreach (var user in usersFromFile)
+            {
+                LibraryUsers.Instance.AddUser(user);
+            }
+            
 
             while (true)
             {
@@ -234,11 +319,13 @@ namespace LibraryManagement
                         int id = int.Parse(Console.ReadLine());
                         Console.Write("Enter book title: ");
                         string title = Console.ReadLine();
+                        Console.Write("Enter genre: ");
+                        string genre = Console.ReadLine();
                         Console.Write("Enter book author: ");
                         string author = Console.ReadLine();
                         Console.Write("Enter publication year: ");
                         int year = int.Parse(Console.ReadLine());
-                        Book newBook = new Book(id, title, author, year);
+                        Book newBook = new Book(id, title, genre, author, year);
                         facade.AddBook(newBook);
                         Console.WriteLine("Book added successfully.");
                         break;
@@ -289,7 +376,9 @@ namespace LibraryManagement
                         int userId = int.Parse(Console.ReadLine());
                         Console.Write("Enter user name: ");
                         string userName = Console.ReadLine();
-                        User newUser = new User { Id = userId, Name = userName };
+                        Console.Write("Enter user email: ");
+                        string userEmail = Console.ReadLine();
+                        User newUser = new User { Id = userId, Name = userName, Email = userEmail };
                         LibraryUsers.Instance.AddUser(newUser);
                         Console.WriteLine("User added successfully.");
                         break;
@@ -318,7 +407,7 @@ namespace LibraryManagement
                         List<User> allUsers = LibraryUsers.Instance.GetUsers();
                         foreach (var user in allUsers)
                         {
-                            Console.WriteLine($"ID: {user.Id}, Name: {user.Name}, Borrowed books: {user.BorrowedBooks.Count}");
+                            Console.WriteLine($"ID: {user.Id}, Name: {user.Name}, Email: {user.Email}, Borrowed books: {user.BorrowedBooks.Count}");
                         }
                         break;
                     case "9":
