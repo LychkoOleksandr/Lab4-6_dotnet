@@ -85,52 +85,18 @@ namespace LibraryManagement
                 if (!book.Reservations.Contains(user))
                 {
                     book.Reservations.Add(user);
-                    return "Book is unavailable, but has been reserved for you";
+                    int position = book.Reservations.Count;
+                    return $"Book is unavailable, but has been reserved for you. Position in queue: {position}";
                 }
                 else
                 {
-                    return "Book is unavailable and you have already reserved it";
+                    int position = book.Reservations.IndexOf(user) + 1;
+                    return $"Book is unavailable and you have already reserved it. Your position in queue: {position}";
                 }
             }
         }
 
         public string GetStrategyName() => "Borrow or reserve";
-    }
-
-    // Конкретна стратегія: Додає користувача в чергу очікування
-    public class WaitingListStrategy : IBorrowStrategy
-    {
-        public string ExecuteBorrow(User user, Book book)
-        {
-            if (book == null)
-            {
-                return "Book not found";
-            }
-
-            if (book.IsAvailable)
-            {
-                book.IsAvailable = false;
-                user.BorrowedBooks.Add(book);
-                return "Book successfully borrowed";
-            }
-            else
-            {
-                // Додаємо в чергу очікування тільки якщо користувача там ще немає
-                if (!book.Reservations.Contains(user))
-                {
-                    book.Reservations.Add(user);
-                    int position = book.Reservations.Count;
-                    return $"Book is unavailable. You are added to waiting list at position {position}. You will be notified when book becomes available.";
-                }
-                else
-                {
-                    int position = book.Reservations.IndexOf(user) + 1;
-                    return $"You are already in the waiting list at position {position}";
-                }
-            }
-        }
-
-        public string GetStrategyName() => "Waiting list with position tracking";
     }
 
     // Клас для представлення користувача з індивідуальною стратегією
@@ -554,7 +520,6 @@ namespace LibraryManagement
                             Console.WriteLine("Choose new borrow strategy:");
                             Console.WriteLine("1. Borrow only if available (no reservation)");
                             Console.WriteLine("2. Borrow or reserve if unavailable");
-                            Console.WriteLine("3. Waiting list with position tracking");
                             Console.Write("Choose strategy: ");
                             string strategyChoice = Console.ReadLine();
                             
@@ -567,10 +532,6 @@ namespace LibraryManagement
                                 case "2":
                                     currentUser.SetBorrowStrategy(new BorrowOrReserveStrategy());
                                     Console.WriteLine($"Strategy for {currentUser.Name} set to: Borrow or reserve");
-                                    break;
-                                case "3":
-                                    currentUser.SetBorrowStrategy(new WaitingListStrategy());
-                                    Console.WriteLine($"Strategy for {currentUser.Name} set to: Waiting list mode");
                                     break;
                                 default:
                                     Console.WriteLine("Invalid strategy choice");
