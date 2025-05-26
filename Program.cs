@@ -272,7 +272,7 @@ namespace LibraryManagement
         }
     }
 
-    // консольний застосунок
+    // Консольний застосунок
     class Program
     {
         private static User currentUser = null;
