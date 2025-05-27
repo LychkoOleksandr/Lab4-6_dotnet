@@ -125,7 +125,7 @@ namespace LibraryManagement
         }
     }
 
-    // Контекст для стратегії (тепер використовується для кожного користувача)
+    // Контекст для стратегії
     public class BorrowContext
     {
         public string ProcessBorrowRequest(User user, Book book)
@@ -286,7 +286,7 @@ namespace LibraryManagement
         public List<User> GetUsers() => users;
     }
 
-    // Фасад: Спрощує взаємодію з системою
+    // Фасад
     public class LibraryFacade
     {
         private BorrowContext borrowContext;
@@ -314,24 +314,6 @@ namespace LibraryManagement
         {
             Book book = LibraryCatalog.Instance.FindBookByTitle(title);
             return borrowContext.ProcessBorrowRequest(user, book);
-        }
-
-        public string ReserveBook(User user, string title)
-        {
-            Book book = LibraryCatalog.Instance.FindBookByTitle(title);
-            if (book == null)
-            {
-                return "Book not found";
-            }
-            if (!book.Reservations.Contains(user))
-            {
-                book.Reservations.Add(user);
-                return "Book reserved for you";
-            }
-            else
-            {
-                return "You have already reserved this book";
-            }
         }
 
         public string ReturnBook(User user, string title)
